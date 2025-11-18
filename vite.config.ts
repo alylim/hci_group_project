@@ -18,6 +18,7 @@ export default defineConfig({
     tailwindcss(),
   ],
   build: { outDir: 'dist' },
+  base: '/hci_group_project/',
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url)),
