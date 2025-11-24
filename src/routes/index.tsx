@@ -3,7 +3,6 @@ import { createFileRoute, Link } from '@tanstack/react-router'
 import { Separator } from '@/components/ui/separator'
 import { Window } from '@/components/window'
 import { Banana } from 'lucide-react'
-import { Item } from '@/components/ui/item'
 
 export const Route = createFileRoute('/')({
   component: App,
