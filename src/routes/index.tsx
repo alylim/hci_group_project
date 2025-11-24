@@ -1,5 +1,9 @@
-import { createFileRoute } from '@tanstack/react-router'
-import logo from '../logo.svg'
+import { createFileRoute, Link } from '@tanstack/react-router'
+
+import { Separator } from '@/components/ui/separator'
+import { Window } from '@/components/window'
+import { Banana } from 'lucide-react'
+import { Item } from '@/components/ui/item'
 
 export const Route = createFileRoute('/')({
   component: App,
@@ -7,33 +11,39 @@ export const Route = createFileRoute('/')({
 
 function App() {
   return (
-    <div className="text-center">
-      <header className="min-h-screen flex flex-col items-center justify-center bg-[#282c34] text-white text-[calc(10px+2vmin)]">
-        <img
-          src={logo}
-          className="h-[40vmin] pointer-events-none animate-[spin_20s_linear_infinite]"
-          alt="logo"
-        />
-        <p>
-          Edit <code>src/routes/index.tsx</code> and save to reload.
-        </p>
-        <a
-          className="text-[#61dafb] hover:underline"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-        <a
-          className="text-[#61dafb] hover:underline"
-          href="https://tanstack.com"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn TanStack
-        </a>
-      </header>
+    <div className="w-screen">
+      <div className="py-20 px-40">
+        <Window>
+          <div className="border rounded-md p-4">
+            <div className="grid grid-cols-5 font-bold text-sm">
+              <div>Decks</div>
+              <div>Status</div>
+              <div>New</div>
+              <div>Learn</div>
+              <div>Due</div>
+            </div>
+            <Separator orientation="horizontal" />
+
+            <div className="grid grid-cols-5 text-sm">
+              <Link to="/review">Latin</Link>
+              <div>due</div>
+              <div>new</div>
+              <div>learn</div>
+              <div>due</div>
+            </div>
+
+            <div className="grid grid-cols-5 text-sm">
+              <Link to="/review">Latin</Link>
+              <div>
+                <Banana className="text-red-500" />
+              </div>
+              <div>new</div>
+              <div>learn</div>
+              <div>due</div>
+            </div>
+          </div>
+        </Window>
+      </div>
     </div>
   )
 }
