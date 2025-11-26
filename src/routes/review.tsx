@@ -50,10 +50,7 @@ function RouteComponent() {
     setIsFlipped(true)
   }
 
-  const handleRate = (rating: Rating) => {
-    console.log('Rated:', rating)
-
-    // move to next card – even past the end so isDone becomes true
+  const handleRate = (_rating: Rating) => {
     setIsFlipped(false)
     setCurrentIndex((prev) => prev + 1)
   }
@@ -71,8 +68,6 @@ function RouteComponent() {
                   currentCard={currentCard}
                   nextCard={nextCard}
                   isFlipped={isFlipped}
-                  // onFlip={handleShowAnswer}
-                  // onRate={handleRate}
                 />
 
                 <ReviewButtonRender

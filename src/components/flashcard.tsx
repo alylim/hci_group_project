@@ -17,7 +17,7 @@ const shuffleExit: TargetAndTransition = {
   scale: [1, 1.03, 1, 0.92],
   opacity: [1, 1, 1, 0],
   transition: {
-    duration: 0.55,
+    duration: 0.35,
     times: [0, 0.25, 0.55, 1],
     ease: easeInOut,
   },
@@ -63,7 +63,7 @@ function Card(props: CardProps) {
     >
       <motion.div
         animate={{ rotateY: flipped ? 180 : 0 }}
-        transition={{ duration: 0.35, ease: 'easeInOut' }}
+        transition={{ duration: 0.25, ease: 'easeInOut' }}
         className="w-full h-full bg-white rounded-2xl shadow-xl border border-gray-200
                    flex items-center justify-center text-xl font-medium relative"
         style={{ transformStyle: 'preserve-3d' }}
