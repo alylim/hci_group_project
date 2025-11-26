@@ -1,13 +1,14 @@
 import { Link } from '@tanstack/react-router'
 
-import { X, Minus, ChevronsLeftRight } from 'lucide-react'
+import { ChevronsLeftRight, Minus, X } from 'lucide-react'
 import {
   NavigationMenu,
-  NavigationMenuList,
   NavigationMenuItem,
   NavigationMenuLink,
+  NavigationMenuList,
   navigationMenuTriggerStyle,
 } from '@/components/ui/navigation-menu'
+import { cn } from '@/lib/utils'
 
 function Window({ children }: { children: React.ReactNode }) {
   return (
@@ -37,47 +38,42 @@ function Window({ children }: { children: React.ReactNode }) {
                 asChild
                 className={navigationMenuTriggerStyle()}
               >
-                <Link to={'/'}>Home</Link>
-              </NavigationMenuLink>
-            </NavigationMenuItem>
-            <NavigationMenuItem>
-              <NavigationMenuLink
-                asChild
-                className={navigationMenuTriggerStyle()}
-              >
                 <Link to={'/'}>Decks</Link>
               </NavigationMenuLink>
             </NavigationMenuItem>
             <NavigationMenuItem>
               <NavigationMenuLink
-                asChild
-                className={navigationMenuTriggerStyle()}
+                className={cn(
+                  navigationMenuTriggerStyle(),
+                  'disabled hover:bg-white text-gray-500',
+                )}
               >
-                <Link to={'/'}>Add</Link>
+                Add
+              </NavigationMenuLink>
+            </NavigationMenuItem>
+            <NavigationMenuItem>
+              <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+                <Link to={'/challenge'}>Challenge</Link>
               </NavigationMenuLink>
             </NavigationMenuItem>
             <NavigationMenuItem>
               <NavigationMenuLink
-                asChild
-                className={navigationMenuTriggerStyle()}
+                className={cn(
+                  navigationMenuTriggerStyle(),
+                  'disabled hover:bg-white text-gray-500',
+                )}
               >
-                <Link to={'/'}>Browse</Link>
+                Stats
               </NavigationMenuLink>
             </NavigationMenuItem>
             <NavigationMenuItem>
               <NavigationMenuLink
-                asChild
-                className={navigationMenuTriggerStyle()}
+                className={cn(
+                  navigationMenuTriggerStyle(),
+                  'disabled hover:bg-white text-gray-500',
+                )}
               >
-                <Link to={'/'}>Stats</Link>
-              </NavigationMenuLink>
-            </NavigationMenuItem>
-            <NavigationMenuItem>
-              <NavigationMenuLink
-                asChild
-                className={navigationMenuTriggerStyle()}
-              >
-                <Link to={'/'}>Sync</Link>
+                Sync
               </NavigationMenuLink>
             </NavigationMenuItem>
           </NavigationMenuList>
