@@ -1,33 +1,38 @@
-import { useState } from 'react'
-import Card from './flashcard'
-import RatingButtons from './rating-buttons'
+// flashcard-deck.tsx
+import { AnimatePresence } from 'framer-motion'
+import { Card } from './flashcard'
+import type { Flashcard } from './flashcard'
 
 type FlashcardDeckProps = {
-  data: { front: string; back: string }[]
+  currentCard?: Flashcard
+  nextCard?: Flashcard
+  isFlipped: boolean
 }
 
-function FlashcardDeck({ data }: FlashcardDeckProps) {
-  const [cards, setCards] = useState(data)
-
-  const nextCard = cards[1]
-
+function FlashcardDeck({
+  currentCard,
+  nextCard,
+  isFlipped,
+}: FlashcardDeckProps) {
   return (
-    <div className="w-full h-screen flex flex-col items-center justify-center space-y-6 bg-gray-100">
-      <div className="relative w-[340px] h-[220px]">
-        {/* Next card (stacked, lower opacity) */}
-        {nextCard && (
-          <div className="absolute inset-0 scale-[0.96] translate-y-2 opacity-70">
-            <Card card={nextCard} staticCard />
-          </div>
-        )}
+    <div className="relative w-[340px] h-[220px]">
+      {/* Behind card: always there if nextCard exists, but fades in when flipped */}
+      {nextCard && (
+        <div
+          className={`absolute inset-0 scale-[0.96] translate-y-2 pointer-events-none transition-opacity duration-200 ${
+            isFlipped ? 'opacity-70' : 'opacity-0'
+          }`}
+        >
+          <Card card={nextCard} staticCard />
+        </div>
+      )}
 
-        {/* Current card */}
+      {/* Animated current card */}
+      <AnimatePresence mode="wait">
         {currentCard && (
-          <Card key={currentCard.id} card={currentCard} onRated={handleRate} />
+          <Card key={currentCard.id} card={currentCard} flipped={isFlipped} />
         )}
-      </div>
-
-      <RatingButtons onRate={handleRate} />
+      </AnimatePresence>
     </div>
   )
 }
