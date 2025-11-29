@@ -5,6 +5,7 @@ import { Window } from '@/components/window'
 import { FlashcardDeck } from '@/components/flashcard-deck'
 import { Button } from '@/components/ui/button'
 import { ReviewProgressBar } from '@/components/animated-progress-bar'
+import { useSound } from '@/hooks/useSound'
 
 export const Route = createFileRoute('/review')({
   component: RouteComponent,
@@ -55,6 +56,11 @@ function RouteComponent() {
   const [progressBarGlow, setProgressBarGlow] = useState<GlowColor>('none')
   const progressBarRef = useRef<HTMLDivElement>(null)
 
+  const playEasySound = useSound('easy.mp3', 0.5)
+  const playGoodSound = useSound('good.mp3', 0.5)
+  const playHardSound = useSound('hard.mp3', 0.5)
+  const playAgainSound = useSound('again.mp3', 0.1)
+
   const currentCard = deck[currentIndex]
 
   const buttonState: 'show' | 'rate' = isFlipped ? 'rate' : 'show'
@@ -71,6 +77,7 @@ function RouteComponent() {
 
     switch (rating) {
       case 'again': {
+        playAgainSound(400)
         newDeck.splice(currentIndex, 1)
         const insertPosAgain = Math.min(currentIndex + 2, newDeck.length)
         newDeck.splice(insertPosAgain, 0, currentCardData)
@@ -79,6 +86,7 @@ function RouteComponent() {
       }
 
       case 'hard': {
+        playHardSound(500)
         newDeck.splice(currentIndex, 1)
         const insertPosHard = Math.min(currentIndex + 4, newDeck.length)
         newDeck.splice(insertPosHard, 0, currentCardData)
@@ -87,14 +95,20 @@ function RouteComponent() {
       }
 
       case 'good':
-      case 'easy':
+        playGoodSound(500)
         newDeck.splice(currentIndex, 1)
         setMasteredCards((prev) => new Set(prev).add(currentCardData.id))
         shouldAdvance = true
-
-        // Trigger progress bar glow immediately with card
-        setProgressBarGlow(rating === 'easy' ? 'blue' : 'green')
+        setProgressBarGlow('green')
         break
+      case 'easy':
+        playEasySound(400)
+        newDeck.splice(currentIndex, 1)
+        setMasteredCards((prev) => new Set(prev).add(currentCardData.id))
+        shouldAdvance = true
+        setProgressBarGlow('blue')
+        break
+
       default:
         throw new Error(`Invalid rating: ${rating}`)
     }

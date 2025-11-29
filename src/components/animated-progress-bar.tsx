@@ -49,7 +49,7 @@ const ReviewProgressBar = forwardRef<
       ref={ref}
       key={glowTrigger} // Force re-mount on trigger change
       animate={getGlowAnimation(glowColor)}
-      className="w-full max-w-[340px] relative rounded-full"
+      className="w-full max-w-[640px] relative rounded-full"
     >
       <Progress value={progress * 100} className="h-3" />
     </motion.div>

@@ -20,8 +20,7 @@ function FlashcardDeck({
   progressBarRef,
 }: FlashcardDeckProps) {
   return (
-    <div className="relative w-[340px] h-[480px]">
-      {/* Background card - show next card preview */}
+    <div className="relative w-[600px] h-[400px]">
       {hasNextCard && nextCard && (
         <div className="absolute inset-0 -rotate-2 scale-95 opacity-40">
           <Card card={nextCard} staticCard />
