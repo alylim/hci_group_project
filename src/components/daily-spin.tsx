@@ -1,6 +1,6 @@
-import { useState, useEffect } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
-import { X, Sparkles } from 'lucide-react'
+import { useEffect, useState } from 'react'
+import { AnimatePresence, motion } from 'framer-motion'
+import { Sparkles, X } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 
 type DailySpinModalProps = {
@@ -41,7 +41,7 @@ export function DailySpinModal({
     if (isOpen) {
       const alreadySpun = hasSpunThisSession()
       const sessionReward = getSessionReward()
-      
+
       if (alreadySpun && sessionReward) {
         // Already spun - show reward screen
         setShowReward(true)
@@ -69,7 +69,7 @@ export function DailySpinModal({
     // Calculate rotation to land on the selected reward
     const degreesPerSegment = 360 / rewards.length
     const baseRotation = 360 * 5 // Spin 5 full rotations
-    const targetRotation = baseRotation + (rewardIndex * degreesPerSegment)
+    const targetRotation = baseRotation + rewardIndex * degreesPerSegment
 
     setRotation(targetRotation)
 
@@ -134,10 +134,11 @@ export function DailySpinModal({
                     }}
                     className="relative w-72 h-72 rounded-full border-8 border-gray-200 shadow-xl overflow-hidden"
                   >
-                    {rewards.map((reward, index) => {
+                    {rewards.map((_reward, index) => {
                       const angle = (360 / rewards.length) * index
                       const isEven = index % 2 === 0
-                      const segmentAngle = (360 / rewards.length) * (Math.PI / 180)
+                      const segmentAngle =
+                        (360 / rewards.length) * (Math.PI / 180)
 
                       return (
                         <div
@@ -174,7 +175,9 @@ export function DailySpinModal({
                   className="flex flex-col items-center gap-4 w-full"
                 >
                   <div className="text-center space-y-2">
-                    <p className="text-lg text-gray-600">Congrats on your reward!</p>
+                    <p className="text-lg text-gray-600">
+                      Congrats on your reward!
+                    </p>
                     <div className="flex items-center justify-center gap-2 text-4xl font-bold">
                       <Sparkles className="text-yellow-500" size={32} />
                       <span className="bg-gradient-to-r from-green-500 to-emerald-600 bg-clip-text text-transparent">
@@ -186,10 +189,11 @@ export function DailySpinModal({
 
                   <div className="mt-4 p-4 bg-gray-50 rounded-lg text-center w-full">
                     <p className="text-sm text-gray-600">
-                      Your points earned today will be multiplied by {selectedReward}x!
+                      Your points earned today will be multiplied by{' '}
+                      {selectedReward}x!
                     </p>
                   </div>
-                  
+
                   {/* Only show this message after spinning */}
                   <p className="text-xs text-gray-500 text-center">
                     Come back tomorrow for another spin!
