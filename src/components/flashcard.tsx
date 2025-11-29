@@ -66,7 +66,14 @@ function Card(props: CardProps) {
   // Static (background) card
   if (props.staticCard) {
     return (
-      <div className="w-full h-full bg-white rounded-2xl shadow-md border flex items-center justify-center text-xl font-medium px-4 text-center">
+      <div
+        className="w-full h-full bg-white rounded-3xl shadow-lg border border-gray-200 flex items-center justify-center text-2xl font-normal px-8 text-center"
+        style={{
+          backgroundImage: 'url(/flashcard-lines.svg)',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+        }}
+      >
         {card.front}
       </div>
     )
@@ -164,19 +171,28 @@ function Card(props: CardProps) {
       <motion.div
         animate={{ rotateY: flipped ? 180 : 0 }}
         transition={{ duration: 0.25, ease: 'easeInOut' }}
-        className="w-full h-full bg-white rounded-2xl shadow-xl border relative
-                   flex items-center justify-center text-xl font-medium
+        className="w-full h-full bg-white rounded-3xl shadow-2xl border relative
+                   flex items-center justify-center text-2xl font-normal
                    border-gray-200"
-        style={{ transformStyle: 'preserve-3d' }}
+        style={{
+          transformStyle: 'preserve-3d',
+          backgroundImage: 'url("/hci_group_project/flashcard-bg.svg")',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+        }}
       >
         {/* FRONT */}
-        <div className="absolute inset-0 flex flex-col items-center justify-center gap-4 px-4 text-center backface-hidden">
-          <div className={flipped ? 'hidden' : ''}>{card.front}</div>
+        <div className="absolute inset-0 flex flex-col items-center justify-center gap-4 px-8 text-center backface-hidden">
+          <div className="bg-white/70 px-6 py-4 rounded-xl">
+            <div className={flipped ? 'hidden' : ''}>{card.front}</div>
+          </div>
         </div>
 
         {/* BACK */}
-        <div className="absolute inset-0 flex flex-col items-center justify-center gap-4 px-4 text-center backface-hidden rotate-y-180">
-          <div>{card.back}</div>
+        <div className="absolute inset-0 flex flex-col items-center justify-center gap-4 px-8 text-center backface-hidden rotate-y-180">
+          <div className="bg-white/70 px-6 py-4 rounded-xl">
+            <div>{card.back}</div>
+          </div>
         </div>
       </motion.div>
     </motion.div>
