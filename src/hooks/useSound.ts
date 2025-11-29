@@ -1,7 +1,9 @@
 import { useEffect, useRef } from 'react'
+import { useAudioStore } from '@/stores/audio-store'
 
 function useSound(soundFile: string, volume: number = 0.5) {
   const audioRef = useRef<HTMLAudioElement | null>(null)
+  const isMuted = useAudioStore((state) => state.isMuted)
 
   useEffect(() => {
     const audio = new Audio(`${import.meta.env.BASE_URL}${soundFile}`)
@@ -11,6 +13,7 @@ function useSound(soundFile: string, volume: number = 0.5) {
   }, [soundFile, volume])
 
   const play = (maxDuration?: number) => {
+    if (isMuted) return
     if (audioRef.current) {
       audioRef.current.currentTime = 0
       audioRef.current

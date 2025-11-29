@@ -6,6 +6,7 @@ import { FlashcardDeck } from '@/components/flashcard-deck'
 import { Button } from '@/components/ui/button'
 import { ReviewProgressBar } from '@/components/animated-progress-bar'
 import { useSound } from '@/hooks/useSound'
+import { useLeaderboardStore } from '@/stores/leaderboard-store'
 
 export const Route = createFileRoute('/review')({
   component: RouteComponent,
@@ -55,6 +56,8 @@ function RouteComponent() {
   const [masteredCards, setMasteredCards] = useState<Set<string>>(new Set())
   const [progressBarGlow, setProgressBarGlow] = useState<GlowColor>('none')
   const progressBarRef = useRef<HTMLDivElement>(null)
+
+  const addPoints = useLeaderboardStore((state) => state.addPoints)
 
   const playEasySound = useSound('easy.mp3', 0.5)
   const playGoodSound = useSound('good.mp3', 0.5)
@@ -126,6 +129,7 @@ function RouteComponent() {
         // Check if complete
         if (newDeck.length === 0) {
           setIsComplete(true)
+          addPoints(80) // Example: 10 points per mastered card
         } else if (currentIndex >= newDeck.length) {
           setCurrentIndex(0)
         }
