@@ -1,6 +1,7 @@
 import { Link } from '@tanstack/react-router'
 
-import { ChevronsLeftRight, Minus, X } from 'lucide-react'
+import { ChevronsLeftRight, Minus, Volume2, VolumeX, X } from 'lucide-react'
+import { Button } from '@/components/ui/button'
 import {
   NavigationMenu,
   NavigationMenuItem,
@@ -9,8 +10,13 @@ import {
   navigationMenuTriggerStyle,
 } from '@/components/ui/navigation-menu'
 import { cn } from '@/lib/utils'
+import { useAudioStore } from '@/stores/audio-store'
+import { useLeaderboardStore } from '@/stores/leaderboard-store'
 
 function Window({ children }: { children: React.ReactNode }) {
+  const { isMuted, toggleMute } = useAudioStore()
+  const showRankUpBadge = useLeaderboardStore((state) => state.showRankUpBadge)
+
   return (
     <div className="w-full border rounded-md">
       <div className="bg-gray-100 p-1 border-bottom">
@@ -30,7 +36,7 @@ function Window({ children }: { children: React.ReactNode }) {
         </div>
       </div>
 
-      <div className="flex flex-row justify-center">
+      <div className="flex flex-row justify-center items-center gap-2">
         <NavigationMenu className="border rounded-md border-t-0 shadow-sm">
           <NavigationMenuList>
             <NavigationMenuItem>
@@ -54,6 +60,15 @@ function Window({ children }: { children: React.ReactNode }) {
             <NavigationMenuItem>
               <NavigationMenuLink className={navigationMenuTriggerStyle()}>
                 <Link to={'/challenge'}>Challenge</Link>
+                <Link to={'/challenge'} className="flex items-center gap-2">
+                  Challenge
+                  {/* {showRankUpBadge && (
+                    <span className="flex h-2 w-2">
+                      <span className="animate-ping absolute inline-flex h-2 w-2 rounded-full bg-red-400 opacity-75"></span>
+                      <span className="relative inline-flex rounded-full h-2 w-2 bg-red-500"></span>
+                    </span>
+                  )} */}
+                </Link>
               </NavigationMenuLink>
             </NavigationMenuItem>
             <NavigationMenuItem>
@@ -81,6 +96,17 @@ function Window({ children }: { children: React.ReactNode }) {
       </div>
 
       <div className="px-4 py-4">{children}</div>
+
+      <div className="flex justify-end p-2">
+        <Button
+          onClick={toggleMute}
+          className="hover:bg-gray-100 rounded-md transition-colors p-2 text-gray-500"
+          variant="ghost"
+          size="icon"
+        >
+          {isMuted ? <VolumeX size={20} /> : <Volume2 size={20} />}
+        </Button>
+      </div>
     </div>
   )
 }

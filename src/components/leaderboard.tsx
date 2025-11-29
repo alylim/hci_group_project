@@ -11,6 +11,7 @@ import {
   ItemTitle,
 } from '@/components/ui/item'
 import { useDailySpinStore } from '@/stores/daily-spin-store'
+import { useLeaderboardStore } from '@/stores/leaderboard-store'
 
 type Friend = {
   id: string
@@ -21,90 +22,6 @@ type Friend = {
   trend: 'up' | 'down' | 'same'
   isYou?: boolean
 }
-
-const mockFriends: Array<Friend> = [
-  {
-    id: '1',
-    name: 'Alice',
-    points: 922,
-    streak: 21,
-    cardsCompleted: 356,
-    trend: 'same',
-  },
-  {
-    id: '2',
-    name: 'Georgia',
-    points: 856,
-    streak: 21,
-    cardsCompleted: 319,
-    trend: 'up',
-    isYou: true,
-  },
-  {
-    id: '3',
-    name: 'Charlie',
-    points: 834,
-    streak: 20,
-    cardsCompleted: 309,
-    trend: 'down',
-  },
-  {
-    id: '4',
-    name: 'David',
-    points: 788,
-    streak: 18,
-    cardsCompleted: 287,
-    trend: 'up',
-  },
-  {
-    id: '5',
-    name: 'Emma',
-    points: 756,
-    streak: 19,
-    cardsCompleted: 275,
-    trend: 'same',
-  },
-  {
-    id: '6',
-    name: 'Frank',
-    points: 723,
-    streak: 15,
-    cardsCompleted: 264,
-    trend: 'down',
-  },
-  {
-    id: '7',
-    name: 'Grace',
-    points: 698,
-    streak: 17,
-    cardsCompleted: 251,
-    trend: 'up',
-  },
-  {
-    id: '8',
-    name: 'Henry',
-    points: 672,
-    streak: 14,
-    cardsCompleted: 243,
-    trend: 'down',
-  },
-  {
-    id: '9',
-    name: 'Ivy',
-    points: 645,
-    streak: 16,
-    cardsCompleted: 232,
-    trend: 'same',
-  },
-  {
-    id: '10',
-    name: 'Jack',
-    points: 623,
-    streak: 13,
-    cardsCompleted: 221,
-    trend: 'up',
-  },
-]
 
 function getRankBadge(rank: number) {
   const baseClasses = 'flex items-center justify-center font-bold text-lg'
@@ -154,14 +71,11 @@ function getTrendIcon(trend: Friend['trend']) {
 function Leaderboard() {
   const [showDailySpin, setShowDailySpin] = useState(false)
   const { hasSpun, reward } = useDailySpinStore()
+  const friends = useLeaderboardStore((state) => state.friends)
 
   const handleDailySpinClick = () => {
     setShowDailySpin(true)
   }
-
-  // const handleSpinComplete = () => {
-  // Can add additional logic here if needed
-  // }
 
   return (
     <div className="w-full mx-auto space-y-6">
@@ -192,7 +106,7 @@ function Leaderboard() {
 
       {/* Leaderboard List */}
       <div className="space-y-2 max-h-[500px] overflow-y-auto pr-2">
-        {mockFriends.map((friend, index) => {
+        {friends.map((friend, index) => {
           const rank = index + 1
           const isHighlighted = friend.isYou
 
