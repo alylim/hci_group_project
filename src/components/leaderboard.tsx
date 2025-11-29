@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { Clover, Minus, TrendingDown, TrendingUp } from 'lucide-react'
 import { DailySpinModal } from './daily-spin'
 import { Button } from '@/components/ui/button'
@@ -10,6 +10,7 @@ import {
   ItemMedia,
   ItemTitle,
 } from '@/components/ui/item'
+import { useDailySpinStore } from '@/stores/daily-spin-store'
 
 type Friend = {
   id: string
@@ -150,37 +151,17 @@ function getTrendIcon(trend: Friend['trend']) {
   return <Minus className="text-gray-400" size={18} />
 }
 
-// Check if already spun this session
-function hasSpunThisSession(): boolean {
-  return sessionStorage.getItem('hasSpun') === 'true'
-}
-
-function getSessionReward(): number | null {
-  const reward = sessionStorage.getItem('sessionReward')
-  return reward ? parseFloat(reward) : null
-}
-
-export function Leaderboard() {
+function Leaderboard() {
   const [showDailySpin, setShowDailySpin] = useState(false)
-  const [lastSpinReward, setLastSpinReward] = useState<number | null>(null)
-
-  // Check for existing reward on mount
-  useEffect(() => {
-    const reward = getSessionReward()
-    if (reward) {
-      setLastSpinReward(reward)
-    }
-  }, [])
+  const { hasSpun, reward } = useDailySpinStore()
 
   const handleDailySpinClick = () => {
     setShowDailySpin(true)
   }
 
-  const handleSpinComplete = (multiplier: number) => {
-    setLastSpinReward(multiplier)
-  }
-
-  const alreadySpun = hasSpunThisSession()
+  // const handleSpinComplete = () => {
+  // Can add additional logic here if needed
+  // }
 
   return (
     <div className="w-full mx-auto space-y-6">
@@ -192,19 +173,18 @@ export function Leaderboard() {
           className="bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white shadow-md hover:shadow-lg transition-all"
         >
           <Clover className="mr-2" size={18} />
-          {alreadySpun ? 'View Reward' : 'Daily Spin'}
+          {hasSpun ? 'View Reward' : 'Daily Spin'}
         </Button>
       </div>
 
       {/* Active Multiplier Badge - Only shows after spinning */}
-      {lastSpinReward && (
+      {reward && (
         <div className="p-4 bg-gradient-to-r from-green-50 to-emerald-50 rounded-lg border-2 border-green-200">
           <div className="flex items-center justify-center gap-2">
             <Clover className="text-green-600" size={20} />
             <p className="text-sm font-medium text-green-900">
               Active Multiplier:{' '}
-              <span className="text-lg font-bold">{lastSpinReward}x</span>{' '}
-              points today!
+              <span className="text-lg font-bold">{reward}x</span> points today!
             </p>
           </div>
         </div>
@@ -240,7 +220,6 @@ export function Leaderboard() {
                   completed
                 </ItemDescription>
               </ItemContent>
-
               <ItemActions>
                 <div className="flex items-center gap-3">
                   {getTrendIcon(friend.trend)}
@@ -259,8 +238,9 @@ export function Leaderboard() {
       <DailySpinModal
         isOpen={showDailySpin}
         onClose={() => setShowDailySpin(false)}
-        onSpinComplete={handleSpinComplete}
       />
     </div>
   )
 }
+
+export { Leaderboard }
