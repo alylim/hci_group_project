@@ -1,14 +1,14 @@
-import { useState, useEffect } from 'react'
-import { TrendingUp, TrendingDown, Minus, Clover } from 'lucide-react'
+import { useEffect, useState } from 'react'
+import { Clover, Minus, TrendingDown, TrendingUp } from 'lucide-react'
 import { DailySpinModal } from './daily-spin'
 import { Button } from '@/components/ui/button'
 import {
   Item,
+  ItemActions,
   ItemContent,
-  ItemTitle,
   ItemDescription,
   ItemMedia,
-  ItemActions,
+  ItemTitle,
 } from '@/components/ui/item'
 
 type Friend = {
@@ -21,7 +21,7 @@ type Friend = {
   isYou?: boolean
 }
 
-const mockFriends: Friend[] = [
+const mockFriends: Array<Friend> = [
   {
     id: '1',
     name: 'Alice',
@@ -107,32 +107,36 @@ const mockFriends: Friend[] = [
 
 function getRankBadge(rank: number) {
   const baseClasses = 'flex items-center justify-center font-bold text-lg'
-  
+
   if (rank === 1) {
     return (
-      <div className={`${baseClasses} size-10 rounded-full bg-yellow-400 text-yellow-900`}>
+      <div
+        className={`${baseClasses} size-10 rounded-full bg-yellow-400 text-yellow-900`}
+      >
         {rank}
       </div>
     )
   }
   if (rank === 2) {
     return (
-      <div className={`${baseClasses} size-10 rounded-full bg-gray-300 text-gray-700`}>
+      <div
+        className={`${baseClasses} size-10 rounded-full bg-gray-300 text-gray-700`}
+      >
         {rank}
       </div>
     )
   }
   if (rank === 3) {
     return (
-      <div className={`${baseClasses} size-10 rounded-full bg-orange-400 text-orange-900`}>
+      <div
+        className={`${baseClasses} size-10 rounded-full bg-orange-400 text-orange-900`}
+      >
         {rank}
       </div>
     )
   }
   return (
-    <div className={`${baseClasses} size-10 text-muted-foreground`}>
-      {rank}
-    </div>
+    <div className={`${baseClasses} size-10 text-muted-foreground`}>{rank}</div>
   )
 }
 
@@ -198,7 +202,9 @@ export function Leaderboard() {
           <div className="flex items-center justify-center gap-2">
             <Clover className="text-green-600" size={20} />
             <p className="text-sm font-medium text-green-900">
-              Active Multiplier: <span className="text-lg font-bold">{lastSpinReward}x</span> points today!
+              Active Multiplier:{' '}
+              <span className="text-lg font-bold">{lastSpinReward}x</span>{' '}
+              points today!
             </p>
           </div>
         </div>
@@ -214,11 +220,11 @@ export function Leaderboard() {
             <Item
               key={friend.id}
               variant={isHighlighted ? 'muted' : 'outline'}
-              className={isHighlighted ? 'border-2 border-cyan-500 bg-cyan-50/50' : ''}
+              className={
+                isHighlighted ? 'border-2 border-cyan-500 bg-cyan-50/50' : ''
+              }
             >
-              <ItemMedia variant="default">
-                {getRankBadge(rank)}
-              </ItemMedia>
+              <ItemMedia variant="default">{getRankBadge(rank)}</ItemMedia>
 
               <ItemContent>
                 <ItemTitle>
@@ -230,7 +236,8 @@ export function Leaderboard() {
                   )}
                 </ItemTitle>
                 <ItemDescription>
-                  {friend.streak} days streak · {friend.cardsCompleted} cards completed
+                  {friend.streak} days streak · {friend.cardsCompleted} cards
+                  completed
                 </ItemDescription>
               </ItemContent>
 
