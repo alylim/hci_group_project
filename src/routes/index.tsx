@@ -31,6 +31,7 @@ type DeckSettingsType = {
   isVacationMode: boolean
   studyDeadline?: string
   reminderDaysFrequency?: number
+  isCustomFrequency?: boolean
 }
 
 type DeckType = {
@@ -48,7 +49,7 @@ const initDecks: Array<DeckType> = [
       isReminderEnabled: false,
       isVacationMode: false,
       studyDeadline: '',
-      reminderDaysFrequency: 0,
+      reminderDaysFrequency: 1,
     },
   },
   {
@@ -61,7 +62,7 @@ const initDecks: Array<DeckType> = [
       isReminderEnabled: false,
       isVacationMode: false,
       studyDeadline: '',
-      reminderDaysFrequency: 0,
+      reminderDaysFrequency: 1,
     },
   },
 ]
@@ -74,27 +75,17 @@ const statusColorMapper = {
 
 function App() {
   const [deckData, setDeckData] = useState<Array<DeckType>>(initDecks)
-
   const [selectedDeckIdx, setSelectedDeckIdx] = useState<number | null>(null)
-  const [reminderEnabled, setReminderEnabled] = useState(false)
-  const [deadline, setDeadline] = useState('')
-  const [vacationEnabled, setVacationEnabled] = useState(false)
-  const [reminderFrequency, setReminderFrequency] = useState('1')
-  const [customDays, setCustomDays] = useState('')
-
-  function handleAlarmClick(idx: number) {
-    setSelectedDeckIdx(idx)
-  }
 
   function handleSettingUpdate(
     setting: keyof DeckSettingsType,
     value: DeckSettingsType[keyof DeckSettingsType],
   ) {
     if (selectedDeckIdx === null) return
-    const currDeck = deckData[selectedDeckIdx]
+
     setDeckData((prevDecks) =>
-      prevDecks.map((deck) =>
-        deck.title === currDeck.title
+      prevDecks.map((deck, idx) =>
+        idx === selectedDeckIdx
           ? {
               ...deck,
               settings: {
@@ -106,6 +97,9 @@ function App() {
       ),
     )
   }
+
+  const selectedDeck =
+    selectedDeckIdx !== null ? deckData[selectedDeckIdx] : null
 
   return (
     <div className="w-screen">
@@ -127,8 +121,11 @@ function App() {
                   key={`deck-${idx}`}
                   className="grid grid-cols-[4fr_1fr_1fr_1fr_1fr] text-sm py-2"
                 >
-                  {idx === 0 && <Link to="/review">{deck.title}</Link>}
-                  {idx !== 0 && <div>{deck.title}</div>}
+                  {idx === 0 ? (
+                    <Link to="/review">{deck.title}</Link>
+                  ) : (
+                    <div>{deck.title}</div>
+                  )}
 
                   <div className="flex items-center justify-center">
                     <AlarmClock
@@ -136,7 +133,7 @@ function App() {
                         'cursor-pointer hover:opacity-70',
                         statusColorMapper[deck.status],
                       )}
-                      onClick={() => handleAlarmClick(idx)}
+                      onClick={() => setSelectedDeckIdx(idx)}
                     />
                   </div>
                   <div className="text-center text-blue-500">{deck.new}</div>
@@ -148,11 +145,11 @@ function App() {
           </div>
 
           {/* Reminder setting options */}
-          {selectedDeckIdx !== null && (
+          {selectedDeck && (
             <div className="mt-4 border rounded-md p-6 bg-white shadow-lg relative">
               <div className="flex flex-row justify-between">
                 <h3 className="font-bold text-sm mb-4">
-                  Reminder Settings - {deckData[selectedDeckIdx].title}
+                  Reminder Settings - {selectedDeck.title}
                 </h3>
 
                 <Button
@@ -174,25 +171,11 @@ function App() {
                   </Label>
                   <Switch
                     id="reminder-toggle"
-                    onCheckedChange={(value) =>
+                    checked={selectedDeck.settings.isReminderEnabled}
+                    onCheckedChange={(value: boolean) =>
                       handleSettingUpdate('isReminderEnabled', value)
                     }
                   />
-
-                  {/* <div className="flex items-center gap-2">
-                    <span className="text-sm text-gray-500">
-                      {reminderEnabled ? 'On' : 'Off'}
-                    </span>
-                    <input
-                      id="reminder-toggle"
-                      type="checkbox"
-                      checked={reminderEnabled}
-                      onChange={(e) => setReminderEnabled(e.target.checked)}
-                      className="w-10 h-6 appearance-none bg-gray-300 rounded-full relative cursor-pointer transition-colors checked:bg-green-500
-                    before:content-[''] before:absolute before:w-5 before:h-5 before:rounded-full before:bg-white before:top-0.5 before:left-0.5 before:transition-transform before:shadow-md
-                    checked:before:translate-x-4"
-                    />
-                  </div> */}
                 </div>
 
                 <div className="flex items-center justify-between py-3">
@@ -201,24 +184,11 @@ function App() {
                   </Label>
                   <Switch
                     id="vacation-toggle"
-                    onCheckedChange={(value) =>
+                    checked={selectedDeck.settings.isVacationMode}
+                    onCheckedChange={(value: boolean) =>
                       handleSettingUpdate('isVacationMode', value)
                     }
                   />
-                  {/* <div className="flex items-center gap-2">
-                    <span className="text-sm text-gray-500">
-                      {vacationEnabled ? 'On' : 'Off'}
-                    </span>
-                    <input
-                      id="vacation-toggle"
-                      type="checkbox"
-                      checked={vacationEnabled}
-                      onChange={(e) => setVacationEnabled(e.target.checked)}
-                      className="w-10 h-6 appearance-none bg-gray-300 rounded-full relative cursor-pointer transition-colors checked:bg-green-500
-                    before:content-[''] before:absolute before:w-5 before:h-5 before:rounded-full before:bg-white before:top-0.5 before:left-0.5 before:transition-transform before:shadow-md
-                    checked:before:translate-x-4"
-                    />
-                  </div> */}
                 </div>
 
                 <div className="flex items-center justify-between py-3">
@@ -226,12 +196,10 @@ function App() {
                     Set exam or study deadline
                   </Label>
                   <DatePicker
-                    id={deadline}
+                    id="deadline"
                     value={
-                      deckData[selectedDeckIdx].settings.studyDeadline
-                        ? new Date(
-                            deckData[selectedDeckIdx].settings.studyDeadline,
-                          )
+                      selectedDeck.settings.studyDeadline
+                        ? new Date(selectedDeck.settings.studyDeadline)
                         : undefined
                     }
                     onChange={(date) =>
@@ -249,16 +217,22 @@ function App() {
                   </Label>
                   <div className="flex items-center gap-2">
                     <Select
-                      value={deckData[
-                        selectedDeckIdx
-                      ].settings.reminderDaysFrequency?.toString()}
-                      onValueChange={(value: string) =>
-                        handleSettingUpdate(
-                          'reminderDaysFrequency',
-                          Number(value),
-                        )
+                      value={
+                        selectedDeck.settings.isCustomFrequency
+                          ? 'custom'
+                          : String(selectedDeck.settings.reminderDaysFrequency)
                       }
-                      // className="border rounded-md px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      onValueChange={(value: string) => {
+                        if (value === 'custom') {
+                          handleSettingUpdate('isCustomFrequency', true)
+                        } else {
+                          handleSettingUpdate('isCustomFrequency', false)
+                          handleSettingUpdate(
+                            'reminderDaysFrequency',
+                            Number(value),
+                          )
+                        }
+                      }}
                     >
                       <SelectTrigger id="frequency" className="w-40">
                         <SelectValue placeholder="Select frequency" />
@@ -272,24 +246,26 @@ function App() {
                         <SelectItem value="custom">Custom</SelectItem>
                       </SelectContent>
                     </Select>
-                    {reminderFrequency === 'custom' && (
-                      <Input
-                        type="number"
-                        min={1}
-                        placeholder="Days"
-                        value={customDays}
-                        onChange={(e) => {
-                          const val = e.target.value
-                          setCustomDays(val)
-
-                          const num = Number(val)
-                          if (!Number.isNaN(num) && num > 0) {
-                            // Update DeckSettings.reminderDaysFrequency with a proper number
-                            handleSettingUpdate('reminderDaysFrequency', num)
+                    {selectedDeck.settings.isCustomFrequency && (
+                      <>
+                        <Input
+                          type="number"
+                          min={1}
+                          placeholder="Days"
+                          value={
+                            selectedDeck.settings.reminderDaysFrequency || ''
                           }
-                        }}
-                        className="w-20"
-                      />
+                          onChange={(e) => {
+                            const val = e.target.value
+                            const num = Number(val)
+                            if (!Number.isNaN(num) && num > 0) {
+                              handleSettingUpdate('reminderDaysFrequency', num)
+                            }
+                          }}
+                          className="w-20"
+                        />
+                        <p className="text-sm text-gray-600">day(s)</p>
+                      </>
                     )}
                   </div>
                 </div>
