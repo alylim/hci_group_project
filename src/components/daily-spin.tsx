@@ -2,50 +2,32 @@ import { useEffect, useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { Sparkles, X } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import { useDailySpinStore } from '@/stores/daily-spin-store'
+import { useSound } from '@/hooks/useSound'
 
 type DailySpinModalProps = {
   isOpen: boolean
   onClose: () => void
-  onSpinComplete: (multiplier: number) => void
 }
 
 const rewards = [1.5, 2, 3, 1.2, 2.5, 1.8, 2.2, 1.5]
 
-// Check if already spun this session
-function hasSpunThisSession(): boolean {
-  return sessionStorage.getItem('hasSpun') === 'true'
-}
-
-function getSessionReward(): number | null {
-  const reward = sessionStorage.getItem('sessionReward')
-  return reward ? parseFloat(reward) : null
-}
-
-function saveSpin(reward: number) {
-  sessionStorage.setItem('hasSpun', 'true')
-  sessionStorage.setItem('sessionReward', reward.toString())
-}
-
-export function DailySpinModal({
-  isOpen,
-  onClose,
-  onSpinComplete,
-}: DailySpinModalProps) {
+export function DailySpinModal({ isOpen, onClose }: DailySpinModalProps) {
+  const { hasSpun, reward: storedReward, spin } = useDailySpinStore()
   const [isSpinning, setIsSpinning] = useState(false)
   const [showReward, setShowReward] = useState(false)
   const [selectedReward, setSelectedReward] = useState<number | null>(null)
   const [rotation, setRotation] = useState(0)
 
-  // Initialize state based on whether already spun this session
+  const playSpinSound = useSound('daily-spin.mp3', 0.3)
+
+  // Initialize state based on whether already spun
   useEffect(() => {
     if (isOpen) {
-      const alreadySpun = hasSpunThisSession()
-      const sessionReward = getSessionReward()
-
-      if (alreadySpun && sessionReward) {
+      if (hasSpun && storedReward) {
         // Already spun - show reward screen
         setShowReward(true)
-        setSelectedReward(sessionReward)
+        setSelectedReward(storedReward)
       } else {
         // Not spun yet - show wheel
         setShowReward(false)
@@ -53,12 +35,13 @@ export function DailySpinModal({
         setRotation(0)
       }
     }
-  }, [isOpen])
+  }, [isOpen, hasSpun, storedReward])
 
   const handleSpin = () => {
-    // Prevent spinning if already spun this session
-    if (hasSpunThisSession()) return
+    // Prevent spinning if already spun
+    if (hasSpun) return
 
+    playSpinSound()
     setIsSpinning(true)
     setShowReward(false)
 
@@ -78,8 +61,7 @@ export function DailySpinModal({
       setIsSpinning(false)
       setSelectedReward(reward)
       setShowReward(true)
-      saveSpin(reward)
-      onSpinComplete(reward)
+      spin(reward)
     }, 3000)
   }
 
@@ -129,8 +111,9 @@ export function DailySpinModal({
                   <motion.div
                     animate={{ rotate: rotation }}
                     transition={{
-                      duration: 3,
-                      ease: [0.34, 1.56, 0.64, 1],
+                      duration: 2.85, // Slightly shorter to match sound end
+                      times: [0, 0.4, 0.65, 0.82, 0.94, 1],
+                      ease: 'easeOut',
                     }}
                     className="relative w-72 h-72 rounded-full border-8 border-gray-200 shadow-xl overflow-hidden"
                   >
@@ -194,7 +177,6 @@ export function DailySpinModal({
                     </p>
                   </div>
 
-                  {/* Only show this message after spinning */}
                   <p className="text-xs text-gray-500 text-center">
                     Come back tomorrow for another spin!
                   </p>
