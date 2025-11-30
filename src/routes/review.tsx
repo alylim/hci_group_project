@@ -7,6 +7,11 @@ import { Button } from '@/components/ui/button'
 import { ReviewProgressBar } from '@/components/animated-progress-bar'
 import { useSound } from '@/hooks/useSound'
 import { useLeaderboardStore } from '@/stores/leaderboard-store'
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from '@/components/ui/tooltip'
 
 export const Route = createFileRoute('/review')({
   component: RouteComponent,
@@ -214,35 +219,64 @@ function ReviewButtonRender({
     <div className="flex space-x-4">
       {status === 'rate' && (
         <>
-          <Button
-            onClick={() => onRate('again')}
-            className="px-4 py-2 bg-red-500 text-white rounded-xl shadow hover:bg-red-600"
-          >
-            Again
-          </Button>
-          <Button
-            onClick={() => onRate('hard')}
-            className="px-4 py-2 bg-yellow-500 text-white rounded-xl shadow hover:bg-yellow-600"
-          >
-            Hard
-          </Button>
-          <Button
-            onClick={() => onRate('good')}
-            className="px-4 py-2 bg-green-500 text-white rounded-xl shadow hover:bg-green-600"
-          >
-            Good
-          </Button>
-          <Button
-            onClick={() => onRate('easy')}
-            className="px-4 py-2 bg-blue-500 text-white rounded-xl shadow hover:bg-blue-600"
-          >
-            Easy
-          </Button>
+          <SRSTooltip text="Review again in less than 1 minute">
+            <Button
+              onClick={() => onRate('again')}
+              className="px-4 py-2 bg-red-200 shadow hover:bg-red-400 border-red-600 text-red-800 w-[100px]"
+              variant="outline"
+            >
+              Try Again
+            </Button>
+          </SRSTooltip>
+          <SRSTooltip text="Review again in less than 3 minutes">
+            <Button
+              onClick={() => onRate('hard')}
+              className="px-4 py-2 bg-yellow-100 shadow hover:bg-yellow-400 border border-yellow-600 text-yellow-800 w-[100px]"
+              variant="outline"
+            >
+              Hard
+            </Button>
+          </SRSTooltip>
+          <SRSTooltip text="Review in 1 day">
+            <Button
+              onClick={() => onRate('good')}
+              className="px-4 py-2 bg-green-200 shadow hover:bg-green-400 border border-green-600 text-green-800 w-[100px]"
+              variant="outline"
+            >
+              Good
+            </Button>
+          </SRSTooltip>
+          <SRSTooltip text="Review again in 4 days">
+            <Button
+              onClick={() => onRate('easy')}
+              className="px-4 py-2 bg-blue-200 shadow hover:bg-blue-400 border border-blue-600 text-blue-800 w-[100px]"
+              variant="outline"
+            >
+              Easy
+            </Button>
+          </SRSTooltip>
         </>
       )}
       {status === 'show' && (
         <Button onClick={handleShowAnswer}>Show Answer</Button>
       )}
     </div>
+  )
+}
+
+function SRSTooltip({
+  text,
+  children,
+}: {
+  text: string
+  children: React.ReactNode
+}) {
+  return (
+    <Tooltip delayDuration={1000}>
+      <TooltipTrigger>{children}</TooltipTrigger>
+      <TooltipContent className="max-w-xs">
+        <p>{text}</p>
+      </TooltipContent>
+    </Tooltip>
   )
 }

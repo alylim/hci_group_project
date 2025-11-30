@@ -1,6 +1,6 @@
 import { Link, createFileRoute } from '@tanstack/react-router'
 import { useState } from 'react'
-import { AlarmClock, X } from 'lucide-react'
+import { AlarmClock, BookOpen, X } from 'lucide-react'
 import { Window } from '@/components/window'
 import { Button, Label, Separator, Switch } from '@/components/ui'
 import { cn } from '@/lib/utils'
@@ -122,7 +122,15 @@ function App() {
                   className="grid grid-cols-[4fr_1fr_1fr_1fr_1fr] text-sm py-2"
                 >
                   {idx === 0 ? (
-                    <Link to="/review">{deck.title}</Link>
+                    <Link
+                      to="/review"
+                      className="text-blue-600 hover:text-blue-800 font-medium hover:underline flex items-center gap-2"
+                    >
+                      {deck.title}
+                      <span>
+                        <BookOpen size={16} />
+                      </span>
+                    </Link>
                   ) : (
                     <div>{deck.title}</div>
                   )}
