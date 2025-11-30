@@ -11,11 +11,11 @@ import {
 } from '@/components/ui/navigation-menu'
 import { cn } from '@/lib/utils'
 import { useAudioStore } from '@/stores/audio-store'
-// import { useLeaderboardStore } from '@/stores/leaderboard-store'
+import { useLeaderboardStore } from '@/stores/leaderboard-store'
 
 function Window({ children }: { children: React.ReactNode }) {
   const { isMuted, toggleMute } = useAudioStore()
-  // const showRankUpBadge = useLeaderboardStore((state) => state.showRankUpBadge)
+  const showRankUpBadge = useLeaderboardStore((state) => state.showRankUpBadge)
 
   return (
     <div className="w-full border rounded-md">
@@ -59,15 +59,15 @@ function Window({ children }: { children: React.ReactNode }) {
             </NavigationMenuItem>
             <NavigationMenuItem>
               <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                <Link to={'/challenge'}>Challenge</Link>
+                {/* <Link to={'/challenge'}>Challenge</Link> */}
                 <Link to={'/challenge'} className="flex items-center gap-2">
                   Challenge
-                  {/* {showRankUpBadge && (
+                  {showRankUpBadge && (
                     <span className="flex h-2 w-2">
                       <span className="animate-ping absolute inline-flex h-2 w-2 rounded-full bg-red-400 opacity-75"></span>
                       <span className="relative inline-flex rounded-full h-2 w-2 bg-red-500"></span>
                     </span>
-                  )} */}
+                  )}
                 </Link>
               </NavigationMenuLink>
             </NavigationMenuItem>
