@@ -11,11 +11,11 @@ import {
 } from '@/components/ui/navigation-menu'
 import { cn } from '@/lib/utils'
 import { useAudioStore } from '@/stores/audio-store'
-import { useLeaderboardStore } from '@/stores/leaderboard-store'
+// import { useLeaderboardStore } from '@/stores/leaderboard-store'
 
 function Window({ children }: { children: React.ReactNode }) {
   const { isMuted, toggleMute } = useAudioStore()
-  const showRankUpBadge = useLeaderboardStore((state) => state.showRankUpBadge)
+  // const showRankUpBadge = useLeaderboardStore((state) => state.showRankUpBadge)
 
   return (
     <div className="w-full border rounded-md">
