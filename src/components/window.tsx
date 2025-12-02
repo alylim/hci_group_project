@@ -32,7 +32,7 @@ function Window({ children }: { children: React.ReactNode }) {
           </div>
         </div>
         <div className="flex flex-row justify-center">
-          <div className="text-center font-semibold text-sm">Anki Improved</div>
+          <div className="text-center font-semibold text-sm">GamiDeck</div>
         </div>
       </div>
 

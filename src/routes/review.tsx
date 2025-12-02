@@ -24,30 +24,43 @@ type Flashcard = {
 }
 
 const cards: Array<Flashcard> = [
-  { id: '1', front: 'What is the capital of france?', back: 'paris' },
+  {
+    id: '1',
+    front: 'Which year was the first iPhone released?',
+    back: '2007',
+  },
   {
     id: '2',
-    front: 'Gulf of execution',
+    front: 'Definition of "Gulf of execution"',
     back: 'distance it takes user to perform action in interface',
   },
   {
     id: '3',
-    front: 'useState vs useEffect',
+    front: 'useState vs useEffect?',
     back: 'useEffect for handling side effects, useState for handling reactive state changes',
   },
-  { id: '4', front: '3+2?', back: '5' },
-  { id: '5', front: 'What is the capital of germany?', back: 'berlin' },
+  {
+    id: '4',
+    front:
+      'What caused the 1325 conflict between the rival Italian city-states of Bologna and Modena?',
+    back: 'A wooden bucket (Oaken bucket)',
+  },
+  { id: '5', front: 'What is the capital of Germany?', back: 'Berlin' },
   {
     id: '6',
-    front: 'Gulf of evaluation',
+    front: 'Definition of "Gulf of evaluation"',
     back: 'Amount of effort user must make to interpret the state of the system and determine if they have reached their goals',
   },
   {
     id: '7',
-    front: 'useSyncExternalStore vs useEffect',
-    back: 'useSyncExternalStore for subscribing to external stores, useEffect for handling side effects',
+    front: 'Mitochondria',
+    back: 'The powerhouse of the cell',
   },
-  { id: '8', front: '2+2?', back: '4' },
+  {
+    id: '8',
+    front: 'Which war in November 1932 did Australia participate in?',
+    back: 'The great emu war',
+  },
 ]
 
 type Rating = 'again' | 'hard' | 'good' | 'easy'
